@@ -38,7 +38,10 @@ function renderMarkdown(md) {
 
 async function load(){
   if(!storyPath){ content.innerHTML="<p>Story not found.</p>"; return; }
-  const res=await fetch(storyPath);
+  const res=await fetch(`/${storyPath}`);
+  if(!res.ok){
+    throw new Error(`Failed to load story: ${res.status} ${res.statusText}`);
+  }
   const text=await res.text();
   const {meta,body}=parseFrontMatter(text);
   titleEl.textContent=meta.title||"Story";
